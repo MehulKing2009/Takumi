@@ -1669,7 +1669,7 @@ target_position = Vector2(-18, 0)
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=510408833]
 position = Vector2(120, -44)
-zoom = Vector2(6.6, 4.7)
+zoom = Vector2(6.7, 4.7)
 
 [node name="CharacterBody2D" parent="." unique_id=1129866982 instance=ExtResource("4_7blgo")]
 position = Vector2(101, -43)
