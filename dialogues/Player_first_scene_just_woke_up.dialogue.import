@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://ca712kloxunfn"
+path="res://.godot/imported/Player_first_scene_just_woke_up.dialogue-bacded83ddf8a1eb523a46257639fb88.tres"
+
+[deps]
+
+source_file="res://dialogues/Player_first_scene_just_woke_up.dialogue"
+dest_files=["res://.godot/imported/Player_first_scene_just_woke_up.dialogue-bacded83ddf8a1eb523a46257639fb88.tres"]
+
+[params]
+
+defaults=true
