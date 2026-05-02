@@ -5,6 +5,23 @@
 [ext_resource type="Texture2D" uid="uid://dn6p40pdvjybl" path="res://assets/tiles/wall_tiles.png" id="3_7blgo"]
 [ext_resource type="PackedScene" uid="uid://beltuyw23axfe" path="res://scenes/player_def_with_moves.tscn" id="4_7blgo"]
 
+[sub_resource type="GDScript" id="GDScript_7blgo"]
+script/source = "extends Node2D
+@onready var ray_cast_2d_2: RayCast2D = $RayCast2D2
+@onready var ray_cast_2d: RayCast2D = $RayCast2D
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	if (ray_cast_2d.is_colliding() or ray_cast_2d_2.is_colliding()):
+		get_tree().change_scene_to_file(\"res://scenes/game_outside_house_scene_1.tscn\")
+	
+"
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_svk5y"]
 texture = ExtResource("1_cny6t")
 1:0/0 = 0
@@ -1648,6 +1665,7 @@ sources/1 = SubResource("TileSetAtlasSource_lgjax")
 sources/2 = SubResource("TileSetAtlasSource_sdvrc")
 
 [node name="Game_Scene_1" type="Node2D" unique_id=776964502]
+script = SubResource("GDScript_7blgo")
 
 [node name="TileMap" type="TileMap" parent="." unique_id=205875148]
 tile_set = SubResource("TileSet_nhxoo")
@@ -1659,17 +1677,17 @@ layer_2/name = "Layer2"
 layer_2/tile_data = PackedInt32Array(-393213, 655360, 35, -327677, 655360, 36)
 layer_3/name = "Layer3"
 
-[node name="RayCast2D" type="RayCast2D" parent="." unique_id=498156824]
-position = Vector2(217, -25)
-target_position = Vector2(-20, 1)
-
-[node name="RayCast2D" type="RayCast2D" parent="RayCast2D" unique_id=27532487]
-position = Vector2(-1, -13)
-target_position = Vector2(-18, 0)
-
 [node name="Camera2D" type="Camera2D" parent="." unique_id=510408833]
 position = Vector2(120, -44)
 zoom = Vector2(6.7, 4.7)
 
 [node name="CharacterBody2D" parent="." unique_id=1129866982 instance=ExtResource("4_7blgo")]
 position = Vector2(102, -43)
+
+[node name="RayCast2D2" type="RayCast2D" parent="." unique_id=27532487]
+position = Vector2(216, -38)
+target_position = Vector2(-18, 0)
+
+[node name="RayCast2D" type="RayCast2D" parent="." unique_id=498156824]
+position = Vector2(217, -25)
+target_position = Vector2(-20, 1)
