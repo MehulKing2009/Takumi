@@ -4,78 +4,6 @@
 [ext_resource type="Texture2D" uid="uid://dn4ducfjexjyy" path="res://assets/character/Adam_run_16x16.png" id="2_qns1w"]
 [ext_resource type="Texture2D" uid="uid://c46qbwb8j1ya6" path="res://assets/character/Adam_sit3_16x16.png" id="3_m5ww7"]
 
-[sub_resource type="GDScript" id="GDScript_5dsq7"]
-script/source = "
-extends CharacterBody2D
-
-const SPEED = 100.0
-const IDLE_TIME := 5.0
-
-@onready var anim = $AnimatedSprite2D
-
-var last_dir := \"s\"
-var idle_timer := 0.00
-
-
-
-
-
-func _physics_process(delta: float) -> void:
-
-	var direction := Vector2.ZERO
-
-	if Input.is_key_pressed(KEY_W):
-		direction.y -= 1
-	if Input.is_key_pressed(KEY_S):
-		direction.y += 1
-	if Input.is_key_pressed(KEY_A):
-		direction.x -= 1
-	if Input.is_key_pressed(KEY_D):
-		direction.x += 1
-
-	direction = direction.normalized()
-	velocity = direction * SPEED
-	move_and_slide()
-
-	# Movement happening
-	if direction != Vector2.ZERO:
-		idle_timer = 0.0  # reset timer because user finally did something
-
-		if abs(direction.y) > abs(direction.x):
-			if direction.y < 0:
-				last_dir = \"w\"
-			else:
-				last_dir = \"s\"
-		else:
-			if direction.x < 0:
-				last_dir = \"a\"
-			else:
-				last_dir = \"d\"
-
-		anim.play(\"run_\" + last_dir)
-
-	else:
-		# Not moving → start counting boredom
-		idle_timer += delta
-
-		if idle_timer >= IDLE_TIME:
-			# Sitting logic
-			if last_dir == \"a\" or last_dir == \"w\":
-				anim.play(\"sit_a\")
-			else:
-				anim.play(\"sit_d\")
-		else:
-			anim.play(\"idle_\" + last_dir)
-		
-		
-func play_death(body: Node2D):
-	Engine.time_scale = 0.5
-	body.get_node(\"CollisionShape2D\").queue_free()
-	Engine.time_scale = 1
-	
-	
-"
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dg3rb"]
 size = Vector2(14, 24)
 
@@ -546,7 +474,6 @@ animations = [{
 }]
 
 [node name="adam" type="CharacterBody2D" unique_id=1129866982]
-script = SubResource("GDScript_5dsq7")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=180809237]
 position = Vector2(-1, 4)

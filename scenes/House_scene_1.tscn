@@ -3,7 +3,6 @@
 [ext_resource type="Texture2D" uid="uid://k4uskl005636" path="res://assets/Modern_Interiors_Free_v2.2/Modern tiles_Free/Interiors_free/16x16/Interiors_free_16x16.png" id="1_cny6t"]
 [ext_resource type="Texture2D" uid="uid://bsen5oqpobqut" path="res://assets/tiles/floor_tiles.png" id="2_y6fec"]
 [ext_resource type="Texture2D" uid="uid://dn6p40pdvjybl" path="res://assets/tiles/wall_tiles.png" id="3_7blgo"]
-[ext_resource type="PackedScene" path="res://scenes/player_def_with_moves.tscn" id="4_7blgo"]
 [ext_resource type="PackedScene" uid="uid://durug7ffurrhu" path="res://scenes/adam.tscn" id="5_lgjax"]
 
 [sub_resource type="GDScript" id="GDScript_7blgo"]
@@ -1665,6 +1664,78 @@ sources/0 = SubResource("TileSetAtlasSource_svk5y")
 sources/1 = SubResource("TileSetAtlasSource_lgjax")
 sources/2 = SubResource("TileSetAtlasSource_sdvrc")
 
+[sub_resource type="GDScript" id="GDScript_lgjax"]
+script/source = "
+extends CharacterBody2D
+
+const SPEED = 100.0
+const IDLE_TIME := 5.0
+
+@onready var anim = $AnimatedSprite2D
+
+var last_dir := \"s\"
+var idle_timer := 0.00
+
+
+
+
+
+func _physics_process(delta: float) -> void:
+
+	var direction := Vector2.ZERO
+
+	if Input.is_key_pressed(KEY_W):
+		direction.y -= 1
+	if Input.is_key_pressed(KEY_S):
+		direction.y += 1
+	if Input.is_key_pressed(KEY_A):
+		direction.x -= 1
+	if Input.is_key_pressed(KEY_D):
+		direction.x += 1
+
+	direction = direction.normalized()
+	velocity = direction * SPEED
+	move_and_slide()
+
+	# Movement happening
+	if direction != Vector2.ZERO:
+		idle_timer = 0.0  # reset timer because user finally did something
+
+		if abs(direction.y) > abs(direction.x):
+			if direction.y < 0:
+				last_dir = \"w\"
+			else:
+				last_dir = \"s\"
+		else:
+			if direction.x < 0:
+				last_dir = \"a\"
+			else:
+				last_dir = \"d\"
+
+		anim.play(\"run_\" + last_dir)
+
+	else:
+		# Not moving → start counting boredom
+		idle_timer += delta
+
+		if idle_timer >= IDLE_TIME:
+			# Sitting logic
+			if last_dir == \"a\" or last_dir == \"w\":
+				anim.play(\"sit_a\")
+			else:
+				anim.play(\"sit_d\")
+		else:
+			anim.play(\"idle_\" + last_dir)
+		
+		
+func play_death(body: Node2D):
+	Engine.time_scale = 0.5
+	body.get_node(\"CollisionShape2D\").queue_free()
+	Engine.time_scale = 1
+	
+	
+"
+
 [node name="Game_Scene_1" type="Node2D" unique_id=776964502]
 script = SubResource("GDScript_7blgo")
 
@@ -1682,7 +1753,7 @@ layer_3/name = "Layer3"
 position = Vector2(120, -44)
 zoom = Vector2(6.7, 4.7)
 
-[node name="CharacterBody2D" parent="." unique_id=1129866982 instance=ExtResource("4_7blgo")]
+[node name="CharacterBody2D" parent="." unique_id=1129866982]
 position = Vector2(274, -66)
 
 [node name="RayCast2D2" type="RayCast2D" parent="." unique_id=27532487]
@@ -1695,3 +1766,4 @@ target_position = Vector2(-20, 1)
 
 [node name="adam" parent="." unique_id=1117728744 instance=ExtResource("5_lgjax")]
 position = Vector2(94, -44)
+script = SubResource("GDScript_lgjax")

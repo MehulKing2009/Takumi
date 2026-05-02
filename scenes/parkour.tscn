@@ -1,17 +1,75 @@
 [gd_scene format=3 uid="uid://2kpua3mgx1ek"]
 
-[ext_resource type="Texture2D" uid="uid://dekh12ptn0olk" path="res://assets/parkour/DystopianCity/SampleImage.png" id="1_t14y4"]
 [ext_resource type="PackedScene" uid="uid://durug7ffurrhu" path="res://scenes/adam.tscn" id="2_a3vsc"]
+[ext_resource type="Texture2D" uid="uid://s2bxwpeuwvkv" path="res://assets/parkour/SampleImage.png" id="2_t14y4"]
+
+[sub_resource type="GDScript" id="GDScript_t14y4"]
+script/source = "extends CharacterBody2D
+
+const SPEED = 100.0
+const JUMP_VELOCITY = -300.0
+
+@onready var anim = $AnimatedSprite2D
+
+var last_dir := \"d\"
+
+func _physics_process(delta: float) -> void:
+	var direction := Vector2.ZERO
+
+	# Gravity (the universe insists on it)
+	if not is_on_floor():
+		velocity.y += get_gravity().y * delta
+
+	# Jump (W or Space)
+	if (Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_SPACE)) and is_on_floor():
+		velocity.y = JUMP_VELOCITY
+
+	# Left / Right only
+	if Input.is_key_pressed(KEY_A):
+		direction.x -= 1
+	if Input.is_key_pressed(KEY_D):
+		direction.x += 1
+
+	direction = direction.normalized()
+	velocity.x = direction.x * SPEED
+
+	move_and_slide()
+
+	# Animation logic
+	if direction != Vector2.ZERO:
+		if direction.x < 0:
+			last_dir = \"a\"
+		else:
+			last_dir = \"d\"
+
+		anim.play(\"run_\" + last_dir)
+
+	else:
+		anim.play(\"idle_\" + last_dir)
+
+
+func play_death(body: Node2D):
+	Engine.time_scale = 0.5
+	body.get_node(\"CollisionShape2D\").queue_free()
+	Engine.time_scale = 1
+"
 
 [node name="Node2D" type="Node2D" unique_id=821042055]
 
-[node name="SampleImage" type="Sprite2D" parent="." unique_id=140369005]
-position = Vector2(-43, 2)
-scale = Vector2(0.35587248, 0.3119159)
-texture = ExtResource("1_t14y4")
-
 [node name="adam" parent="." unique_id=1129866982 instance=ExtResource("2_a3vsc")]
-position = Vector2(-526, -27)
+position = Vector2(-412, -12)
+script = SubResource("GDScript_t14y4")
 
 [node name="Camera2D" type="Camera2D" parent="adam" unique_id=559201352]
-position = Vector2(-4, 6)
+position = Vector2(1, -3)
+zoom = Vector2(5, 5)
+limit_left = -520
+limit_top = -360
+limit_right = 522
+limit_bottom = 240
+position_smoothing_enabled = true
+
+[node name="SampleImage" type="Sprite2D" parent="adam" unique_id=258829639]
+position = Vector2(413.00006, 11.999985)
+scale = Vector2(0.34932885, 0.33691588)
+texture = ExtResource("2_t14y4")
