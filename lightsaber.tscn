@@ -1,6 +1,8 @@
-[gd_scene format=3 uid="uid://rmat5njuvh7u"]
+[gd_scene format=3 uid="uid://bpdwho2y3375n"]
 
-[ext_resource type="Texture2D" uid="uid://bwc15ykvow5c4" path="res://assets/lights./New Piskel.png" id="1_1ynj0"]
+[ext_resource type="Texture2D" uid="uid://bwc15ykvow5c4" path="res://assets/lights/New Piskel.png" id="1_1ynj0"]
+[ext_resource type="Script" uid="uid://bjc7tpmqx2iti" path="res://lightsaber.gd" id="1_sfpjb"]
+[ext_resource type="Script" uid="uid://cxfqc2bhec5ff" path="res://hitbox.gd" id="2_74wo3"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_74wo3"]
 atlas = ExtResource("1_1ynj0")
@@ -74,20 +76,22 @@ animations = [{
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_rees3"]
-radius = 260.0
-height = 982.0
+radius = 251.0
+height = 1100.0
 
 [node name="Node2D" type="Node2D" unique_id=628765175]
+script = ExtResource("1_sfpjb")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=2131135675]
 position = Vector2(0, 4)
 sprite_frames = SubResource("SpriteFrames_k2d65")
 animation = &"def"
-frame_progress = 0.8614269
+frame_progress = 0.015131487
+script = ExtResource("2_74wo3")
 
 [node name="Area2D" type="Area2D" parent="." unique_id=1718579088]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=193188552]
 light_mask = 513
-position = Vector2(-132, 4)
+position = Vector2(-150, -31)
 shape = SubResource("CapsuleShape2D_rees3")

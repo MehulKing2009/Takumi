@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://durug7ffurrhu"]
+[gd_scene format=3 uid="uid://d385gvanc3cwl"]
 
 [ext_resource type="Texture2D" uid="uid://duln8el4th4h2" path="res://assets/character/Adam_idle_anim_16x16.png" id="1_0ndc1"]
 [ext_resource type="Texture2D" uid="uid://dn4ducfjexjyy" path="res://assets/character/Adam_run_16x16.png" id="2_qns1w"]
@@ -483,3 +483,16 @@ shape = SubResource("RectangleShape2D_dg3rb")
 sprite_frames = SubResource("SpriteFrames_3c6ba")
 animation = &"idle_a"
 autoplay = "idle_s"
+frame_progress = 0.24523203
+
+[node name="hand_a" type="Marker2D" parent="." unique_id=764189]
+position = Vector2(-5, 8)
+
+[node name="hand_d" type="Marker2D" parent="." unique_id=1659392294]
+position = Vector2(6, 8)
+
+[node name="hand_w" type="Marker2D" parent="." unique_id=2137613696]
+position = Vector2(0, -8)
+
+[node name="hand_s" type="Marker2D" parent="." unique_id=1606146653]
+position = Vector2(0, 16)
