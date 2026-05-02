@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://2kpua3mgx1ek"]
+
+[ext_resource type="Texture2D" uid="uid://dekh12ptn0olk" path="res://assets/parkour/DystopianCity/SampleImage.png" id="1_t14y4"]
+[ext_resource type="PackedScene" uid="uid://durug7ffurrhu" path="res://scenes/adam.tscn" id="2_a3vsc"]
+
+[node name="Node2D" type="Node2D" unique_id=821042055]
+
+[node name="SampleImage" type="Sprite2D" parent="." unique_id=140369005]
+position = Vector2(-43, 2)
+scale = Vector2(0.35587248, 0.3119159)
+texture = ExtResource("1_t14y4")
+
+[node name="adam" parent="." unique_id=1129866982 instance=ExtResource("2_a3vsc")]
+position = Vector2(-526, -27)
+
+[node name="Camera2D" type="Camera2D" parent="adam" unique_id=559201352]
+position = Vector2(-4, 6)

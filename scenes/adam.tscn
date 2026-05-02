@@ -14,7 +14,7 @@ const IDLE_TIME := 5.0
 @onready var anim = $AnimatedSprite2D
 
 var last_dir := \"s\"
-var idle_timer := 0.0
+var idle_timer := 0.00
 
 
 
@@ -554,5 +554,5 @@ shape = SubResource("RectangleShape2D_dg3rb")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=162047432]
 sprite_frames = SubResource("SpriteFrames_3c6ba")
-animation = &"idle_w"
+animation = &"idle_a"
 autoplay = "idle_s"
