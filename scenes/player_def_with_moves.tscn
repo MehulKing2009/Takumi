@@ -2,20 +2,19 @@
 
 [ext_resource type="Texture2D" uid="uid://duln8el4th4h2" path="res://assets/character/Adam_idle_anim_16x16.png" id="1_1nrrb"]
 [ext_resource type="Texture2D" uid="uid://dn4ducfjexjyy" path="res://assets/character/Adam_run_16x16.png" id="2_4qjcp"]
+[ext_resource type="Texture2D" uid="uid://c46qbwb8j1ya6" path="res://assets/character/Adam_sit3_16x16.png" id="3_4qjcp"]
 
 [sub_resource type="GDScript" id="GDScript_5dsq7"]
 script/source = "
 extends CharacterBody2D
 
 const SPEED = 100.0
-const JUMP_VELOCITY = -400.0
-
-
-
+const IDLE_TIME := 5.0
 
 @onready var anim = $AnimatedSprite2D
 
-var last_dir := \"s\"  # default facing down because why not
+var last_dir := \"s\"
+var idle_timer := 0.0
 
 func _physics_process(delta: float) -> void:
 
@@ -30,15 +29,14 @@ func _physics_process(delta: float) -> void:
 	if Input.is_key_pressed(KEY_D):
 		direction.x += 1
 
-	# Normalize so diagonal isn't faster (basic decency)
 	direction = direction.normalized()
-
 	velocity = direction * SPEED
 	move_and_slide()
 
-	# Animation logic
+	# Movement happening
 	if direction != Vector2.ZERO:
-		# Decide direction priority (vertical > horizontal, change if you want)
+		idle_timer = 0.0  # reset timer because user finally did something
+
 		if abs(direction.y) > abs(direction.x):
 			if direction.y < 0:
 				last_dir = \"w\"
@@ -51,12 +49,25 @@ func _physics_process(delta: float) -> void:
 				last_dir = \"d\"
 
 		anim.play(\"run_\" + last_dir)
+
 	else:
-		anim.play(\"idle_\" + last_dir)
+		# Not moving → start counting boredom
+		idle_timer += delta
+
+		if idle_timer >= IDLE_TIME:
+			# Sitting logic
+			if last_dir == \"a\" or last_dir == \"w\":
+				anim.play(\"sit_a\")
+			else:
+				anim.play(\"sit_d\")
+		else:
+			anim.play(\"idle_\" + last_dir)
+		
+		
 func play_death(body: Node2D):
 	Engine.time_scale = 0.5
 	body.get_node(\"CollisionShape2D\").queue_free()
-	$AnimatedSprite2D.play(\"death\")
+	
 	
 	Engine.time_scale = 1
 "
@@ -256,6 +267,50 @@ region = Rect2(160, 0, 16, 32)
 atlas = ExtResource("2_4qjcp")
 region = Rect2(176, 0, 16, 32)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_5dsq7"]
+atlas = ExtResource("3_4qjcp")
+region = Rect2(96, 0, 16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dg3rb"]
+atlas = ExtResource("3_4qjcp")
+region = Rect2(112, 0, 16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3c6ba"]
+atlas = ExtResource("3_4qjcp")
+region = Rect2(128, 0, 16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1jml2"]
+atlas = ExtResource("3_4qjcp")
+region = Rect2(144, 0, 16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sj6je"]
+atlas = ExtResource("3_4qjcp")
+region = Rect2(160, 0, 16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_13lub"]
+atlas = ExtResource("3_4qjcp")
+region = Rect2(176, 0, 16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_24xke"]
+atlas = ExtResource("3_4qjcp")
+region = Rect2(0, 0, 16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n3cxx"]
+atlas = ExtResource("3_4qjcp")
+region = Rect2(16, 0, 16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vqngn"]
+atlas = ExtResource("3_4qjcp")
+region = Rect2(32, 0, 16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hdpjc"]
+atlas = ExtResource("3_4qjcp")
+region = Rect2(48, 0, 16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jq1ub"]
+atlas = ExtResource("3_4qjcp")
+region = Rect2(64, 0, 16, 32)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_3c6ba"]
 animations = [{
 "frames": [{
@@ -441,6 +496,49 @@ animations = [{
 "loop": true,
 "name": &"run_w",
 "speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5dsq7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dg3rb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3c6ba")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1jml2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sj6je")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_13lub")
+}],
+"loop": true,
+"name": &"sit_a",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_24xke")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n3cxx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vqngn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hdpjc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jq1ub")
+}],
+"loop": true,
+"name": &"sit_d",
+"speed": 5.0
 }]
 
 [node name="CharacterBody2D" type="CharacterBody2D" unique_id=1129866982]
@@ -452,5 +550,5 @@ shape = SubResource("RectangleShape2D_dg3rb")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=162047432]
 sprite_frames = SubResource("SpriteFrames_3c6ba")
-animation = &"idle_s"
+animation = &"sit_d"
 autoplay = "idle_s"
