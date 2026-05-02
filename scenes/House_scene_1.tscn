@@ -3,7 +3,8 @@
 [ext_resource type="Texture2D" uid="uid://k4uskl005636" path="res://assets/Modern_Interiors_Free_v2.2/Modern tiles_Free/Interiors_free/16x16/Interiors_free_16x16.png" id="1_cny6t"]
 [ext_resource type="Texture2D" uid="uid://bsen5oqpobqut" path="res://assets/tiles/floor_tiles.png" id="2_y6fec"]
 [ext_resource type="Texture2D" uid="uid://dn6p40pdvjybl" path="res://assets/tiles/wall_tiles.png" id="3_7blgo"]
-[ext_resource type="PackedScene" uid="uid://beltuyw23axfe" path="res://scenes/player_def_with_moves.tscn" id="4_7blgo"]
+[ext_resource type="PackedScene" path="res://scenes/player_def_with_moves.tscn" id="4_7blgo"]
+[ext_resource type="PackedScene" uid="uid://durug7ffurrhu" path="res://scenes/adam.tscn" id="5_lgjax"]
 
 [sub_resource type="GDScript" id="GDScript_7blgo"]
 script/source = "extends Node2D
@@ -1682,7 +1683,7 @@ position = Vector2(120, -44)
 zoom = Vector2(6.7, 4.7)
 
 [node name="CharacterBody2D" parent="." unique_id=1129866982 instance=ExtResource("4_7blgo")]
-position = Vector2(102, -43)
+position = Vector2(271, -15)
 
 [node name="RayCast2D2" type="RayCast2D" parent="." unique_id=27532487]
 position = Vector2(216, -38)
@@ -1691,3 +1692,6 @@ target_position = Vector2(-18, 0)
 [node name="RayCast2D" type="RayCast2D" parent="." unique_id=498156824]
 position = Vector2(217, -25)
 target_position = Vector2(-20, 1)
+
+[node name="CharacterBody2D2" parent="." unique_id=1549957063 instance=ExtResource("5_lgjax")]
+position = Vector2(104, -35)
