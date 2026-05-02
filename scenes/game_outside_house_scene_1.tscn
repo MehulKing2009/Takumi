@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://cxmtw1skbnpt1"]
+
+[node name="Game_Outside_house_scene_1" type="Node2D" unique_id=87807840]
+
+[node name="TileMap" type="TileMap" parent="." unique_id=1448400601]
+format = 2
+
+[node name="RayCast2D" type="RayCast2D" parent="." unique_id=420237731]
