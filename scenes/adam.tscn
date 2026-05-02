@@ -474,12 +474,14 @@ animations = [{
 }]
 
 [node name="adam" type="CharacterBody2D" unique_id=1129866982]
+collision_mask = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=180809237]
-position = Vector2(-1, 4)
+position = Vector2(1, 6)
 shape = SubResource("RectangleShape2D_dg3rb")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=162047432]
+position = Vector2(1, 3)
 sprite_frames = SubResource("SpriteFrames_3c6ba")
-animation = &"idle_a"
+animation = &"sit_d"
 autoplay = "idle_s"

@@ -2,21 +2,27 @@
 
 [ext_resource type="PackedScene" uid="uid://durug7ffurrhu" path="res://scenes/adam.tscn" id="2_a3vsc"]
 [ext_resource type="Texture2D" uid="uid://s2bxwpeuwvkv" path="res://assets/parkour/SampleImage.png" id="2_t14y4"]
+[ext_resource type="PackedScene" uid="uid://cdpoqrooquive" path="res://scenes/killz.tscn" id="3_a3vsc"]
+[ext_resource type="Texture2D" uid="uid://dythywuf8undf" path="res://assets/from_first_game/sprites/world_tileset.png" id="4_supqp"]
+[ext_resource type="PackedScene" path="res://scenes/platform.tscn" id="5_45g1d"]
 
 [sub_resource type="GDScript" id="GDScript_t14y4"]
 script/source = "extends CharacterBody2D
 
 const SPEED = 100.0
 const JUMP_VELOCITY = -300.0
+const IDLE_TIME := 5.0
 
 @onready var anim = $AnimatedSprite2D
 
 var last_dir := \"d\"
+var idle_timer := 0.0
+
 
 func _physics_process(delta: float) -> void:
 	var direction := Vector2.ZERO
 
-	# Gravity (the universe insists on it)
+	# Gravity (still undefeated)
 	if not is_on_floor():
 		velocity.y += get_gravity().y * delta
 
@@ -35,8 +41,10 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 
-	# Animation logic
+	# Animation + idle/sit logic
 	if direction != Vector2.ZERO:
+		idle_timer = 0.0  # player remembered keyboard exists
+
 		if direction.x < 0:
 			last_dir = \"a\"
 		else:
@@ -45,18 +53,201 @@ func _physics_process(delta: float) -> void:
 		anim.play(\"run_\" + last_dir)
 
 	else:
-		anim.play(\"idle_\" + last_dir)
+		idle_timer += delta
+
+		if idle_timer >= IDLE_TIME:
+			# Sitting
+			if last_dir == \"a\":
+				anim.play(\"sit_a\")
+			else:
+				anim.play(\"sit_d\")
+		else:
+			anim.play(\"idle_\" + last_dir)
 
 
 func play_death(body: Node2D):
 	Engine.time_scale = 0.5
 	body.get_node(\"CollisionShape2D\").queue_free()
 	Engine.time_scale = 1
+
+
+func _on_area_2d_body_entered(body: Node2D) -> void:
+	pass
 "
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_supqp"]
+distance = -238.0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_45g1d"]
+texture = ExtResource("4_supqp")
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+1:0/0 = 0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+2:0/0 = 0
+2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+3:0/0 = 0
+3:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+4:0/0 = 0
+4:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+5:0/0 = 0
+5:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+6:0/0 = 0
+6:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+7:0/0 = 0
+7:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+8:0/0 = 0
+8:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+9:0/0 = 0
+10:0/0 = 0
+11:0/0 = 0
+0:1/0 = 0
+0:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+1:1/0 = 0
+1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+2:1/0 = 0
+2:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+3:1/0 = 0
+3:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+4:1/0 = 0
+4:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+5:1/0 = 0
+5:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+6:1/0 = 0
+6:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+7:1/0 = 0
+7:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+8:1/0 = 0
+8:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+9:1/0 = 0
+10:1/0 = 0
+11:1/0 = 0
+0:2/0 = 0
+0:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+1:2/0 = 0
+1:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+2:2/0 = 0
+2:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+3:2/0 = 0
+3:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+4:2/0 = 0
+4:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+5:2/0 = 0
+5:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+6:2/0 = 0
+6:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+7:2/0 = 0
+7:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+8:2/0 = 0
+8:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+9:2/0 = 0
+10:2/0 = 0
+11:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+7:3/0 = 0
+8:3/0 = 0
+9:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+6:4/0 = 0
+7:4/0 = 0
+8:4/0 = 0
+9:4/0 = 0
+0:5/0 = 0
+1:5/0 = 0
+2:5/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+5:5/0 = 0
+6:5/0 = 0
+7:5/0 = 0
+8:5/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+4:6/0 = 0
+5:6/0 = 0
+6:6/0 = 0
+7:6/0 = 0
+8:6/0 = 0
+0:7/0 = 0
+1:7/0 = 0
+3:7/0 = 0
+5:7/0 = 0
+6:7/0 = 0
+7:7/0 = 0
+8:7/0 = 0
+0:8/0 = 0
+1:8/0 = 0
+2:8/0 = 0
+3:8/0 = 0
+4:8/0 = 0
+5:8/0 = 0
+6:8/0 = 0
+7:8/0 = 0
+8:8/0 = 0
+0:9/0 = 0
+1:9/0 = 0
+2:9/0 = 0
+3:9/0 = 0
+4:9/0 = 0
+5:9/0 = 0
+6:9/0 = 0
+7:9/0 = 0
+0:10/0 = 0
+1:10/0 = 0
+2:10/0 = 0
+3:10/0 = 0
+4:10/0 = 0
+6:10/0 = 0
+0:11/0 = 0
+1:11/0 = 0
+2:11/0 = 0
+3:11/0 = 0
+4:11/0 = 0
+5:11/0 = 0
+0:12/0 = 0
+1:12/0 = 0
+2:12/0 = 0
+3:12/0 = 0
+4:12/0 = 0
+0:13/0 = 0
+1:13/0 = 0
+2:13/0 = 0
+3:13/0 = 0
+4:13/0 = 0
+5:13/0 = 0
+0:14/0 = 0
+1:14/0 = 0
+2:14/0 = 0
+3:14/0 = 0
+4:14/0 = 0
+0:15/0 = 0
+1:15/0 = 0
+2:15/0 = 0
+3:15/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_sdibd"]
+physics_layer_0/collision_layer = 1
+sources/0 = SubResource("TileSetAtlasSource_45g1d")
 
 [node name="Node2D" type="Node2D" unique_id=821042055]
 
+[node name="SampleImage" type="Sprite2D" parent="." unique_id=258829639]
+position = Vector2(1.000061, -1.5258789e-05)
+scale = Vector2(0.34932885, 0.33691588)
+texture = ExtResource("2_t14y4")
+
 [node name="adam" parent="." unique_id=1129866982 instance=ExtResource("2_a3vsc")]
+visibility_layer = 129
 position = Vector2(-412, -12)
 script = SubResource("GDScript_t14y4")
 
@@ -69,7 +260,15 @@ limit_right = 522
 limit_bottom = 240
 position_smoothing_enabled = true
 
-[node name="SampleImage" type="Sprite2D" parent="adam" unique_id=258829639]
-position = Vector2(413.00006, 11.999985)
-scale = Vector2(0.34932885, 0.33691588)
-texture = ExtResource("2_t14y4")
+[node name="killz" parent="." unique_id=755316169 instance=ExtResource("3_a3vsc")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="killz" unique_id=80638344]
+shape = SubResource("WorldBoundaryShape2D_supqp")
+
+[node name="TileMap" type="TileMap" parent="." unique_id=1176070638]
+tile_set = SubResource("TileSet_sdibd")
+format = 2
+layer_0/tile_data = PackedInt32Array(131046, 196608, 1, 131045, 327680, 1, 131047, 196608, 1)
+
+[node name="Platform" parent="." unique_id=59845590 instance=ExtResource("5_45g1d")]
+position = Vector2(-400, -9)
