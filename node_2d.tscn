@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://qe0r8hu104py"]
+
+[node name="Node2D" type="Node2D" unique_id=1159449842]
+
+[node name="TextEdit" type="TextEdit" parent="." unique_id=1642452106]
+offset_left = 33.0
+offset_top = -361.0
+offset_right = 170.0
+offset_bottom = -285.0
