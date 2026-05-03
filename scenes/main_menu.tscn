@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bi8sq0f1p0m2d"]
 
-[ext_resource type="Texture2D" path="res://i pray to forget.jpg" id="1_l6cm7"]
-[ext_resource type="FontFile" path="res://assets/papyrus.ttf" id="2_ekxnf"]
+[ext_resource type="Texture2D" uid="uid://i87axivn8q2e" path="res://i pray to forget.jpg" id="1_l6cm7"]
+[ext_resource type="FontFile" uid="uid://bvm3lqd47bmco" path="res://assets/papyrus.ttf" id="2_ekxnf"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_bqqt6"]
 
