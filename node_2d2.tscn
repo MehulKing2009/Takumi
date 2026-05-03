@@ -1,7 +1,9 @@
-[gd_scene format=3 uid="uid://bjaxnb3c6m6aa"]
+[gd_scene format=3 uid="uid://d4m2we4raff7r"]
 
 [ext_resource type="Texture2D" uid="uid://djeffiig7huin" path="res://assets/tiles/GRASS+.png" id="1_ebe7b"]
 [ext_resource type="Texture2D" uid="uid://dnu7t1c5oj8si" path="res://assets/tiles/shops.png" id="2_gfoop"]
+[ext_resource type="PackedScene" uid="uid://d385gvanc3cwl" path="res://scenes/adam.tscn" id="3_gfoop"]
+[ext_resource type="PackedScene" uid="uid://jk1jdyop3h5f" path="res://scenes/enemies.tscn" id="4_dy17d"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dy17d"]
 texture = ExtResource("1_ebe7b")
@@ -424,6 +426,85 @@ texture_region_size = Vector2i(42, 17)
 [sub_resource type="TileSet" id="TileSet_41nr1"]
 sources/0 = SubResource("TileSetAtlasSource_t5prh")
 
+[sub_resource type="GDScript" id="GDScript_dy17d"]
+script/source = "
+extends CharacterBody2D
+
+const SPEED = 100.0
+const IDLE_TIME := 5.0
+
+@onready var anim = $AnimatedSprite2D
+
+var last_dir := \"s\"
+var idle_timer := 0.00
+var health: float = 100.0
+
+
+
+
+func _physics_process(delta: float) -> void:
+
+	var direction := Vector2.ZERO
+
+	if Input.is_key_pressed(KEY_W):
+		direction.y -= 1
+	if Input.is_key_pressed(KEY_S):
+		direction.y += 1
+	if Input.is_key_pressed(KEY_A):
+		direction.x -= 1
+	if Input.is_key_pressed(KEY_D):
+		direction.x += 1
+
+	direction = direction.normalized()
+	velocity = direction * SPEED
+	move_and_slide()
+
+	# Movement happening
+	if direction != Vector2.ZERO:
+		idle_timer = 0.0  # reset timer because user finally did something
+
+		if abs(direction.y) > abs(direction.x):
+			if direction.y < 0:
+				last_dir = \"w\"
+			else:
+				last_dir = \"s\"
+		else:
+			if direction.x < 0:
+				last_dir = \"a\"
+			else:
+				last_dir = \"d\"
+
+		anim.play(\"run_\" + last_dir)
+
+	else:
+		# Not moving → start counting boredom
+		idle_timer += delta
+
+		if idle_timer >= IDLE_TIME:
+			# Sitting logic
+			if last_dir == \"a\" or last_dir == \"w\":
+				anim.play(\"sit_a\")
+			else:
+				anim.play(\"sit_d\")
+		else:
+			anim.play(\"idle_\" + last_dir)
+		
+		
+func play_death(body: Node2D):
+	Engine.time_scale = 0.5
+	body.get_node(\"CollisionShape2D\").queue_free()
+	Engine.time_scale = 1
+	
+	
+func player_got_damage(amount: float) -> void:
+	health -= amount
+	print(\"Player took damage! Current health:\", health)
+
+	if health <= 0:
+		get_tree().reload_current_scene()
+	
+"
+
 [node name="Node2D" type="Node2D" unique_id=1182079769]
 
 [node name="TileMap" type="TileMap" parent="." unique_id=605884579]
@@ -437,3 +518,16 @@ tile_set = SubResource("TileSet_41nr1")
 format = 2
 layer_0/name = "Layer1"
 layer_0/tile_data = PackedInt32Array(65538, 0, 0, 131074, 0, 1, 65541, 65536, 0, 131077, 65536, 1, 458757, 0, 805306368, 393221, 0, 805306369, 262156, 0, 2, 327692, 0, 3, 65549, 0, 268435460, 131085, 0, 268435461)
+
+[node name="adam" parent="." unique_id=1129866982 instance=ExtResource("3_gfoop")]
+position = Vector2(60, 197)
+script = SubResource("GDScript_dy17d")
+
+[node name="Camera2D" type="Camera2D" parent="adam" unique_id=1030128781]
+zoom = Vector2(6, 6)
+limit_left = 0
+limit_top = 0
+limit_right = 477
+
+[node name="enemies" parent="." unique_id=199962389 instance=ExtResource("4_dy17d")]
+position = Vector2(151, 207)
