@@ -3,8 +3,8 @@
 [ext_resource type="PackedScene" uid="uid://durug7ffurrhu" path="res://scenes/adam.tscn" id="2_a3vsc"]
 [ext_resource type="Texture2D" uid="uid://s2bxwpeuwvkv" path="res://assets/parkour/SampleImage.png" id="2_t14y4"]
 [ext_resource type="PackedScene" uid="uid://cdpoqrooquive" path="res://scenes/killz.tscn" id="3_a3vsc"]
-[ext_resource type="Texture2D" uid="uid://dythywuf8undf" path="res://assets/from_first_game/sprites/world_tileset.png" id="4_supqp"]
-[ext_resource type="PackedScene" path="res://scenes/platform.tscn" id="5_45g1d"]
+[ext_resource type="Texture2D" uid="uid://dythywuf8undf" path="res://assets/sprites/world_tileset.png" id="4_supqp"]
+[ext_resource type="PackedScene" uid="uid://cm1okteldqrt2" path="res://scenes/platform.tscn" id="5_45g1d"]
 
 [sub_resource type="GDScript" id="GDScript_t14y4"]
 script/source = "extends CharacterBody2D
@@ -270,5 +270,16 @@ tile_set = SubResource("TileSet_sdibd")
 format = 2
 layer_0/tile_data = PackedInt32Array(131046, 196608, 1, 131045, 327680, 1, 131047, 196608, 1)
 
-[node name="Platform" parent="." unique_id=59845590 instance=ExtResource("5_45g1d")]
-position = Vector2(-400, -9)
+[node name="platforms" type="Node" parent="." unique_id=6226418]
+
+[node name="Platform" parent="platforms" unique_id=59845590 instance=ExtResource("5_45g1d")]
+position = Vector2(-407, -28)
+
+[node name="Platform2" parent="platforms" unique_id=82147444 instance=ExtResource("5_45g1d")]
+position = Vector2(-332, -66)
+
+[node name="Platform3" parent="platforms" unique_id=379774690 instance=ExtResource("5_45g1d")]
+position = Vector2(-405, -111)
+
+[node name="Platform4" parent="platforms" unique_id=23622642 instance=ExtResource("5_45g1d")]
+position = Vector2(-408, -158)
