@@ -1,48 +1,61 @@
 extends CharacterBody2D
 
-const SPEED = 120.0
+const SPEED = 25.0
 const DETECTION_RANGE = 200.0
 const BITE_RANGE = 18.0
 const SWING_RANGE = 26.0
+const SEARCH_DELAY = 0.5
 
 @onready var anim: AnimatedSprite2D = $AnimatedSprite2D
 
-var player: Node2D
+var player: Node2D = null
 var can_attack := true
+var search_timer := 0.0
 
 
 func _ready():
-	player = get_parent().get_node("adam")
+	player = null
 
 
 func _physics_process(delta: float) -> void:
+	# Search for player every X seconds
+	search_timer -= delta
+	if search_timer <= 0:
+		search_timer = SEARCH_DELAY
+
+		if player == null or not is_instance_valid(player):
+			player = get_tree().get_root().find_child("adam", true, false)
+
+	# If no player found → idle
 	if player == null:
+		anim.play("idle")
+		velocity = Vector2.ZERO
+		move_and_slide()
 		return
 
 	var distance = global_position.distance_to(player.global_position)
 	var direction = (player.global_position - global_position).normalized()
 
-	# Flip sprite
-	if direction.x != 0:
-		anim.flip_h = direction.x < 0
+	# Rotate to face player (sprite faces down)
+	anim.rotation = direction.angle() + deg_to_rad(270)
 
-	# Out of range → idle
+	# OUT OF RANGE → IDLE
 	if distance > DETECTION_RANGE:
 		anim.play("idle")
 		velocity = Vector2.ZERO
 
 	else:
-		# Bite (closest)
+		# BITE
 		if distance <= BITE_RANGE and can_attack:
 			velocity = Vector2.ZERO
 			anim.play("bite_attack")
 
-		# Swing
+		# SWING
 		elif distance <= SWING_RANGE and can_attack:
 			velocity = Vector2.ZERO
 			anim.play("swing_attack")
 
-		# Walk
+		# WALK
 		else:
 			anim.play("walking")
 			velocity = direction * SPEED
@@ -51,9 +64,10 @@ func _physics_process(delta: float) -> void:
 
 
 func _on_AnimatedSprite2D_frame_changed():
-	if not can_attack:
+	if player == null or not can_attack:
 		return
 
+	# Damage on frame 2
 	if anim.frame == 1:
 		var distance = global_position.distance_to(player.global_position)
 
