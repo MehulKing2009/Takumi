@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://bi8sq0f1p0m2d"]
+
+[ext_resource type="Texture2D" path="res://i pray to forget.jpg" id="1_l6cm7"]
+[ext_resource type="FontFile" path="res://assets/papyrus.ttf" id="2_ekxnf"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_bqqt6"]
+
+[node name="main_menu" type="Node2D" unique_id=2084487201]
+
+[node name="IPrayToForget" type="Sprite2D" parent="." unique_id=333592464]
+position = Vector2(505.00006, 283)
+scale = Vector2(0.228, 0.25)
+texture = ExtResource("1_l6cm7")
+
+[node name="MenuButton" type="MenuButton" parent="." unique_id=17237097]
+offset_left = 183.0
+offset_top = 444.0
+offset_right = 248.0
+offset_bottom = 478.0
+scale = Vector2(0.9200012, 1.1999997)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.4298156, 0.40771288, 0.38864303, 1)
+theme_override_fonts/font = ExtResource("2_ekxnf")
+theme_override_font_sizes/font_size = 32
+text = "PLAY?"
+icon = SubResource("CanvasTexture_bqqt6")
