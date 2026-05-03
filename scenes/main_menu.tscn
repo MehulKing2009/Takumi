@@ -3,9 +3,28 @@
 [ext_resource type="Texture2D" uid="uid://i87axivn8q2e" path="res://i pray to forget.jpg" id="1_l6cm7"]
 [ext_resource type="FontFile" uid="uid://bvm3lqd47bmco" path="res://assets/papyrus.ttf" id="2_ekxnf"]
 
+[sub_resource type="GDScript" id="GDScript_ekxnf"]
+script/source = "extends Node2D
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass
+
+
+func _on_menu_button_pressed() -> void:
+	get_tree().change_scene_to_file(\"res://scenes/House_scene_1.tscn\")
+"
+
 [sub_resource type="CanvasTexture" id="CanvasTexture_bqqt6"]
 
 [node name="main_menu" type="Node2D" unique_id=2084487201]
+script = SubResource("GDScript_ekxnf")
 
 [node name="IPrayToForget" type="Sprite2D" parent="." unique_id=333592464]
 position = Vector2(505.00006, 283)
@@ -24,3 +43,5 @@ theme_override_fonts/font = ExtResource("2_ekxnf")
 theme_override_font_sizes/font_size = 32
 text = "PLAY?"
 icon = SubResource("CanvasTexture_bqqt6")
+
+[connection signal="pressed" from="MenuButton" to="." method="_on_menu_button_pressed"]

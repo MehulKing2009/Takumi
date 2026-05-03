@@ -474,7 +474,8 @@ animations = [{
 }]
 
 [node name="adam" type="CharacterBody2D" unique_id=1129866982]
-collision_mask = 3
+collision_layer = 65
+collision_mask = 67
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=180809237]
 position = Vector2(1, 6)
