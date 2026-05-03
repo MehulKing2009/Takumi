@@ -31,6 +31,18 @@ region = Rect2(94, 329, 47, 47)
 atlas = ExtResource("1_y16gg")
 region = Rect2(141, 329, 47, 47)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_8e4ha"]
+atlas = ExtResource("1_y16gg")
+region = Rect2(0, 141, 47, 47)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sydct"]
+atlas = ExtResource("1_y16gg")
+region = Rect2(0, 188, 47, 47)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2o4i1"]
+atlas = ExtResource("1_y16gg")
+region = Rect2(0, 235, 47, 47)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_cf16h"]
 atlas = ExtResource("1_y16gg")
 region = Rect2(0, 282, 47, 47)
@@ -118,6 +130,20 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_8e4ha")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sydct")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2o4i1")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_cf16h")
 }, {
 "duration": 1.0,
@@ -176,8 +202,7 @@ position = Vector2(-3, 2)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharacterBody2D" unique_id=1076336539]
 sprite_frames = SubResource("SpriteFrames_m488i")
-animation = &"bite_attack"
-frame_progress = 0.03972337
+animation = &"idle"
 
 [connection signal="animation_changed" from="CharacterBody2D/AnimatedSprite2D" to="CharacterBody2D" method="_on_animated_sprite_2d_animation_changed"]
 [connection signal="animation_finished" from="CharacterBody2D/AnimatedSprite2D" to="CharacterBody2D" method="_on_animated_sprite_2d_animation_finished"]
