@@ -511,4 +511,4 @@ limit_right = 477
 limit_bottom = 354
 
 [node name="enemies" parent="." unique_id=199962389 instance=ExtResource("4_dy17d")]
-position = Vector2(151, 207)
+position = Vector2(298, 198)
