@@ -5,92 +5,95 @@ const DETECTION_RANGE = 200.0
 const BITE_RANGE = 18.0
 const SWING_RANGE = 26.0
 const SEARCH_DELAY = 0.5
+const LOOK_DELAY = 0.3
+
+const HIT_FRAME_BITE = 1
+const HIT_FRAME_SWING = 1
+
+const ATTACK_COOLDOWN := 0.8
 
 @onready var anim: AnimatedSprite2D = $AnimatedSprite2D
 
 var player: Node2D = null
 var can_attack := true
 var search_timer := 0.0
+var look_timer := 0.0
+var attack_timer := 0.0
+var last_direction := Vector2.DOWN
 
-
-func _ready():
+func _ready() -> void:
 	player = null
-
+	anim.frame_changed.connect(_on_AnimatedSprite2D_frame_changed)
+	anim.animation_finished.connect(_on_AnimatedSprite2D_animation_finished)
 
 func _physics_process(delta: float) -> void:
-	# Search for player occasionally
-	search_timer -= delta
-	if search_timer <= 0:
-		search_timer = SEARCH_DELAY
+	attack_timer = maxf(attack_timer - delta, 0.0)
+	can_attack = attack_timer <= 0.0
 
+	search_timer -= delta
+	if search_timer <= 0.0:
+		search_timer = SEARCH_DELAY
 		if player == null or not is_instance_valid(player):
 			player = get_tree().get_root().find_child("adam", true, false)
 
-	# No player → idle
 	if player == null:
-		if anim.animation != "idle":
-			anim.play("idle")
 		velocity = Vector2.ZERO
 		move_and_slide()
 		return
 
-	var distance = global_position.distance_to(player.global_position)
-	var direction = (player.global_position - global_position).normalized()
+	var direction := player.global_position - global_position
+	var distance := direction.length()
+	if distance > 0.0:
+		direction = direction.normalized()
 
-	# Rotate (sprite faces down)
-	anim.rotation = direction.angle() + deg_to_rad(270)
+	look_timer -= delta
+	if look_timer <= 0.0:
+		look_timer = LOOK_DELAY
+		last_direction = direction
 
-	# OUT OF RANGE
+	if last_direction.length() > 0.0:
+		anim.rotation = last_direction.angle() - deg_to_rad(90)
+
 	if distance > DETECTION_RANGE:
+		velocity = Vector2.ZERO
 		if anim.animation != "idle":
 			anim.play("idle")
-		velocity = Vector2.ZERO
-
 	else:
-		# BITE
-		if distance <= BITE_RANGE and can_attack:
-			velocity = Vector2.ZERO
-			if anim.animation != "bite_attack":
-				anim.play("bite_attack")
-
-		# SWING
-		elif distance <= SWING_RANGE and can_attack:
-			velocity = Vector2.ZERO
-			if anim.animation != "swing_attack":
-				anim.play("swing_attack")
-
-		# WALK
-		else:
+		if distance > SWING_RANGE:
+			velocity = direction * SPEED
 			if anim.animation != "walking":
 				anim.play("walking")
-			velocity = direction * SPEED
+		else:
+			velocity = Vector2.ZERO
+
+			if can_attack:
+				if distance <= BITE_RANGE:
+					if anim.animation != "bite_attack" or not anim.is_playing():
+						anim.play("bite_attack")
+				elif distance <= SWING_RANGE:
+					if anim.animation != "swing_attack" or not anim.is_playing():
+						anim.play("swing_attack")
 
 	move_and_slide()
 
-
-func _on_AnimatedSprite2D_frame_changed():
-	print("FRAME:", anim.frame)
-
-	if player == null or not can_attack:
+func _on_AnimatedSprite2D_frame_changed() -> void:
+	if player == null or not is_instance_valid(player) or not can_attack:
 		return
 
-	# Damage frame (frame index starts at 0)
-	if anim.frame == 1:
-		print("ATTACK FRAME")
-
-		var distance = global_position.distance_to(player.global_position)
-
-		if distance <= BITE_RANGE:
+	if anim.animation == "bite_attack" and anim.frame == HIT_FRAME_BITE:
+		if global_position.distance_to(player.global_position) <= BITE_RANGE:
 			can_attack = false
-			print("BITE DAMAGE")
+			attack_timer = ATTACK_COOLDOWN
 			player.player_got_damage(randi_range(1, 20))
+			print("Bite hit!")
 
-		elif distance <= SWING_RANGE:
+	elif anim.animation == "swing_attack" and anim.frame == HIT_FRAME_SWING:
+		if global_position.distance_to(player.global_position) <= SWING_RANGE:
 			can_attack = false
-			print("SWING DAMAGE")
+			attack_timer = ATTACK_COOLDOWN
 			player.player_got_damage(randi_range(10, 30))
+			print("Swing hit!")
 
-
-func _on_AnimatedSprite2D_animation_finished():
+func _on_AnimatedSprite2D_animation_finished() -> void:
 	if anim.animation in ["bite_attack", "swing_attack"]:
 		can_attack = true
