@@ -1,0 +1,79 @@
+[gd_scene format=3 uid="uid://cdmvc5f6jsc03"]
+
+[ext_resource type="Script" uid="uid://lrai7ggeoamo" path="res://scenes/character_body_2d.gd" id="1_q4yn1"]
+[ext_resource type="Texture2D" uid="uid://blg7qqi3to46f" path="res://assets/enemies.png" id="1_y16gg"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q4yn1"]
+atlas = ExtResource("1_y16gg")
+region = Rect2(0, 141, 49, 47)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ad2ka"]
+atlas = ExtResource("1_y16gg")
+region = Rect2(49, 141, 49, 47)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i5e8t"]
+atlas = ExtResource("1_y16gg")
+region = Rect2(98, 141, 49, 47)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_010eu"]
+atlas = ExtResource("1_y16gg")
+region = Rect2(147, 141, 49, 47)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pfngh"]
+atlas = ExtResource("1_y16gg")
+region = Rect2(0, 188, 49, 47)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_csyei"]
+atlas = ExtResource("1_y16gg")
+region = Rect2(49, 188, 49, 47)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iv5d7"]
+atlas = ExtResource("1_y16gg")
+region = Rect2(98, 188, 49, 47)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c801f"]
+atlas = ExtResource("1_y16gg")
+region = Rect2(147, 188, 49, 47)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_m488i"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q4yn1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ad2ka")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i5e8t")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_010eu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pfngh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_csyei")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iv5d7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c801f")
+}],
+"loop": true,
+"name": &"walking",
+"speed": 5.0
+}]
+
+[node name="enemies" type="Node2D" unique_id=199962389]
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=1465385242]
+script = ExtResource("1_q4yn1")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D" unique_id=2139111529]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharacterBody2D" unique_id=1076336539]
+sprite_frames = SubResource("SpriteFrames_m488i")
+animation = &"walking"

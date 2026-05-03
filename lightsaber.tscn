@@ -86,7 +86,7 @@ script = ExtResource("1_sfpjb")
 position = Vector2(0, 4)
 sprite_frames = SubResource("SpriteFrames_k2d65")
 animation = &"def"
-frame_progress = 0.015131487
+frame_progress = 0.38558125
 script = ExtResource("2_74wo3")
 
 [node name="Area2D" type="Area2D" parent="." unique_id=1718579088]
