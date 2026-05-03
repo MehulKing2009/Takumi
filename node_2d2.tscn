@@ -2506,23 +2506,19 @@ sources/2 = SubResource("TileSetAtlasSource_41nr1")
 sources/4 = SubResource("TileSetAtlasSource_0ny3e")
 
 [sub_resource type="GDScript" id="GDScript_dy17d"]
-script/source = "
-extends CharacterBody2D
+script/source = "extends CharacterBody2D
 
 const SPEED = 100.0
 const IDLE_TIME := 5.0
 
-@onready var anim = $AnimatedSprite2D
+@onready var anim: AnimatedSprite2D = $AnimatedSprite2D
 
 var last_dir := \"s\"
-var idle_timer := 0.00
+var idle_timer := 0.0
 var health: float = 100.0
 
 
-
-
 func _physics_process(delta: float) -> void:
-
 	var direction := Vector2.ZERO
 
 	if Input.is_key_pressed(KEY_W):
@@ -2538,50 +2534,34 @@ func _physics_process(delta: float) -> void:
 	velocity = direction * SPEED
 	move_and_slide()
 
-	# Movement happening
 	if direction != Vector2.ZERO:
-		idle_timer = 0.0  # reset timer because user finally did something
+		idle_timer = 0.0
 
 		if abs(direction.y) > abs(direction.x):
-			if direction.y < 0:
-				last_dir = \"w\"
-			else:
-				last_dir = \"s\"
+			last_dir = \"w\" if direction.y < 0 else \"s\"
 		else:
-			if direction.x < 0:
-				last_dir = \"a\"
-			else:
-				last_dir = \"d\"
+			last_dir = \"a\" if direction.x < 0 else \"d\"
 
 		anim.play(\"run_\" + last_dir)
 
 	else:
-		# Not moving → start counting boredom
 		idle_timer += delta
 
 		if idle_timer >= IDLE_TIME:
-			# Sitting logic
 			if last_dir == \"a\" or last_dir == \"w\":
 				anim.play(\"sit_a\")
 			else:
 				anim.play(\"sit_d\")
 		else:
 			anim.play(\"idle_\" + last_dir)
-		
-		
-func play_death(body: Node2D):
-	Engine.time_scale = 0.5
-	body.get_node(\"CollisionShape2D\").queue_free()
-	Engine.time_scale = 1
-	
-	
+
+
 func player_got_damage(amount: float) -> void:
 	health -= amount
-	print(\"Player took damage! Current health:\", health)
+	print(\"Player took damage:\", amount, \"Health:\", health)
 
 	if health <= 0:
 		get_tree().reload_current_scene()
-	
 "
 
 [node name="Node2D" type="Node2D" unique_id=1182079769]
@@ -2612,6 +2592,7 @@ zoom = Vector2(6, 6)
 limit_left = 0
 limit_top = 0
 limit_right = 477
+limit_bottom = 354
 
 [node name="enemies" parent="." unique_id=199962389 instance=ExtResource("4_dy17d")]
 position = Vector2(151, 207)
