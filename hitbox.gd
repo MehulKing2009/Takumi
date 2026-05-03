@@ -1,33 +1,41 @@
-extends Node2D
+extends CharacterBody2D
 
-@onready var anim = $AnimatedSprite2D
-@onready var hitbox = $Area2D
+const SPEED = 200.0
 
-var owner_ref = null
-@export var damage := 1
+@onready var hand = $Hand
 
-func _ready():
-	# Disable hitbox initially
-	hitbox.monitoring = false
-	
-	# Connect hit detection
-	hitbox.body_entered.connect(_on_body_entered)
-	
-	# Play slash immediately on spawn
-	anim.play("slash")
+var sword_scene = preload("res://lightsaber.tscn")
+var attacking := false
 
-func enable_hit():
-	hitbox.monitoring = true
-
-func disable_hit():
-	hitbox.monitoring = false
-
-func _on_body_entered(body):
-	if body == owner_ref:
+func _physics_process(delta):
+	if attacking:
+		velocity = Vector2.ZERO
+		move_and_slide()
 		return
 
-	if body.has_method("take_damage"):
-		body.take_damage(damage)
+	var direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
+	velocity = direction * SPEED
+	move_and_slide()
 
-func _on_animation_finished():
-	queue_free()
+func _input(event):
+	if event.is_action_pressed("attack") and not attacking:
+		attack()
+
+func attack():
+	attacking = true
+
+	var sword = sword_scene.instantiate()
+	hand.add_child(sword)
+	sword.position = Vector2.ZERO
+
+	# pass reference so you don’t hit yourself
+	sword.owner_ref = self
+
+	# start animation
+	sword.start()
+
+	# when sword disappears → allow movement again
+	sword.connect("tree_exited", Callable(self, "_on_attack_done"))
+
+func _on_attack_done():
+	attacking = false
