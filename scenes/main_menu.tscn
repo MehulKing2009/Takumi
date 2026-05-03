@@ -5,7 +5,7 @@
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_bqqt6"]
 
-[node name="Node2D" type="Node2D" unique_id=2084487201]
+[node name="main_menu" type="Node2D" unique_id=2084487201]
 
 [node name="IPrayToForget" type="Sprite2D" parent="." unique_id=333592464]
 position = Vector2(505.00006, 283)
